@@ -1,0 +1,95 @@
+<script src="../lib/fx.js"></script>
+
+## range
+
+<script>
+  var add = (a, b) => a + b;
+
+  const range = l => {
+    let i = -1;
+    let res = [];
+    while (++i < l) {
+      res.push(i);
+    }
+    return res;
+  };
+
+  log(range(5))
+  // [0,1,2,3,4]
+  log(range(2))
+  // [0,1]
+
+  var list = range(4);
+  log(list);
+  // Range를 실행 했을 떄 배열로 평가
+  // [0,1,2,3]
+  log(reduce(add, list));
+  // 6
+</script>
+
+## 느긋한 L.range
+
+<script>
+  const L = {};
+
+  //제너레이터함수를 이용해서 이터레이터를 만드는 제너레이터 함수 선언
+  // What is yield?
+  L.range = function* (l) {
+    let i = -1;
+    while (++i < l) {
+      yield i;
+    }
+  };
+
+  var list = L.range(4);
+  // 배열이 아닌 Iterator
+  // 이터레이터가 값을 순회할 때 값을 평가한다..
+  // next를 호출할 때 까지 내부가 동작하지 않는다.
+  log(list);
+  // 이터러블을 이용해 이터레이터를 만든 후 처리
+  log(reduce(add, list));
+</script>
+
+<script>
+  function test(name, time, f) {
+    console.time(name);
+    while (time--) f();
+    console.timeEnd(name);
+  }
+
+  // test('range', 10, () => reduce(add, range(1000000)));
+  // test('L.range', 10, () => reduce(add, L.range(1000000)));
+  console.clear();
+</script>
+
+## take
+
+<script>
+  const take = curry((l, iter) => {
+    let res = [];
+    for (const a of iter) {
+      res.push(a);
+      if (res.length == l) return res;
+    }
+    return res;
+  });
+  log(take(5, range(100000)));
+  log(take(5, L.range(100000)));
+
+  console.time('');
+  go(
+    range(10000),
+    take(5),
+    reduce(add),
+    log);
+  console.timeEnd('');
+
+  console.time('');
+  go(
+    L.range(10000),
+    take(5),
+    reduce(add),
+    log);
+  console.timeEnd('');
+</script>
+
