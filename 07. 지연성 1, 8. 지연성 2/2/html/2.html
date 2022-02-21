@@ -97,6 +97,12 @@
     return acc;
   });
 
+  go(range(10), 
+    map(n => n + 10),
+    filter(n => n%2),
+    take(2),
+    log);
+
   // console.time('');
   // go(range(100000),
   //   map(n => n + 10),
@@ -135,6 +141,12 @@
       }
     }
   });
+
+  go(L.range(10), 
+    L.map(n=> n + 10),
+    L.filter( n => n % 2),
+    take(2),
+    log);
 
   // [0, 1, 2, 3, 4, 5, 6, 7, 8...]
   // [10, 11, 12, ...]
